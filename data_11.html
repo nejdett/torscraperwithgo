@@ -1,0 +1,359 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RansomLook — Open ransomware intelligence</title>
+  <meta name="description" content="Open, searchable ransomware group intelligence with live stats, posts and an API.">
+  <link rel="stylesheet" href="/static/css/main.css" integrity="sha512-Y6hY6KL9sHC1KnPhrFmGruseQW4iEolBBhc68y363ZPhzRVlF/GnJpJuMhCYE96XVgxvAc1STiyQXRpaVCBrgg==">
+  <script defer src="/static/js/main.js" integrity="sha512-XuopJqLSyyDyAfrLDD7BIl4JgP2t53tPRYSOufljt3I0q6sigMDPS41P/H8wxATWYJFGHXBWgfgxZuy7c2tdqw=="></script>
+  <link rel="alternate" type="application/rss+xml" title="RansomLook — Recent posts" href="/rss.xml">
+</head>
+<body>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const toggle   = document.querySelector(".nav-toggle");
+  const navLinks = document.querySelector(".nav-links");
+  const langBtn  = document.querySelector(".lang-btn");
+  const langMenu = document.querySelector(".lang-menu");
+
+  if (toggle && navLinks) {
+    const openNav  = () => { navLinks.classList.add("active"); document.body.classList.add("menu-open"); toggle.setAttribute("aria-expanded","true"); };
+    const closeNav = () => { navLinks.classList.remove("active"); document.body.classList.remove("menu-open"); toggle.setAttribute("aria-expanded","false"); };
+
+    toggle.addEventListener("click", (e) => {
+      e.stopPropagation();
+      navLinks.classList.contains("active") ? closeNav() : openNav();
+    });
+
+    // Fermer au clic en dehors
+    document.addEventListener("click", (e) => {
+      if (navLinks.classList.contains("active") && !navLinks.contains(e.target) && e.target !== toggle) {
+        closeNav();
+      }
+    });
+  }
+
+  // Dropdown langue (pas d'ESC)
+  if (langBtn && langMenu) {
+    const closeLang = () => { langMenu.classList.remove("open"); langBtn.setAttribute("aria-expanded","false"); };
+
+    langBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const open = !langMenu.classList.contains("open");
+      langMenu.classList.toggle("open", open);
+      langBtn.setAttribute("aria-expanded", open ? "true" : "false");
+    });
+
+    document.addEventListener("click", (e) => {
+      if (langMenu.classList.contains("open") && !langMenu.contains(e.target) && e.target !== langBtn) {
+        closeLang();
+      }
+    });
+  }
+});
+</script>
+  <header class="site-header">
+  <div class="container header-inner">
+    <!-- Brand (left) -->
+    <a class="brand" href="/" aria-label="RansomLook home">
+      <img src="/static/ransomlook.svg" alt="RansomLook logo" width="28" height="28">
+      
+      <span class="brand-name" data-name="RansomLook">RansomLook</span>
+   </a>
+
+    <!-- Primary nav (center) -->
+    <nav class="nav-main" aria-label="Primary">
+      
+      <!-- Search button (always visible near burger) -->
+      <button class="nav-toggle" aria-label="Toggle navigation">☰</button>
+      <ul class="nav-links">
+  <li>
+    <a href="/recent" >Recent</a>
+  </li>
+  <li>
+    <a href="/groups" >Groups</a>
+  </li>
+  <li>
+    <a href="/markets" >Markets/Forums</a>
+  </li>
+  <li>
+    <a href="/hot" title="Trending" >Trending</a>
+  <li>
+    <a href="/actors" title="Actors" >Actors</a>
+  </li>
+
+  
+  <li class="more">
+    <details>
+      <summary aria-haspopup="menu" aria-expanded="false" >More</summary>
+      <ul class="more-menu" role="menu">
+        <li role="none">
+          <a role="menuitem" href="/crypto" title="Cryptocurrencies" >Cryptocurrencies</a>
+        </li>
+        <li role="none">
+          <a role="menuitem" href="/leaks" title="Leaks" >Leaks</a>
+        </li>
+        <li role="none">
+          <a role="menuitem" href="/notes" title="Notes" >Ransomware Notes</a>
+        </li>
+        <li role="none">
+          <a role="menuitem" href="/stats" >Stats</a>
+        </li>
+        
+        <li role="none">
+          <a role="menuitem" href="/doc/" >Docs</a>
+        </li>
+        <li role="none">
+          <a role="menuitem" href="/glossary" >Glossary</a>
+        </li>
+        <li role="none">
+          <a role="menuitem" href="/about" >About</a>
+        </li>
+      </ul>
+    </details>
+  </li>
+
+  
+    <li class="nav-login">
+      <a href="/login" >Login</a>
+    </li>
+  
+
+  <li><button class="icon-btn search-open header-search" data-open="searchModal" title="Search (Ctrl/Cmd+K)">
+        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M10.5 3a7.5 7.5 0 0 1 5.916 12.163l4.21 4.21-1.414 1.414-4.21-4.21A7.5 7.5 0 1 1 10.5 3Zm0 2a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11Z" />
+        </svg>
+        <span class="visually-hidden">Search</span>
+      </button>
+</li>
+
+</ul>
+    </nav>
+
+  </div>
+</header>
+
+
+  <main id="content">
+<section class="hero">
+  <div class="container">
+    <!-- Logo centré sans encadré -->
+    <div class="hero-logo">
+      <img src="/static/finaldiplo.png"
+           alt="RansomLook logo"
+           class="hero-logo-img">
+    </div>
+
+    <h1>Welcome to RansomLook</h1>
+    <p class="lead">
+      Open-source project providing real-time ransomware intelligence.
+    </p>
+
+    <div class="cta-row">
+      <a href="/recent" class="btn btn-primary">Explore Recent Posts</a>
+      <a href="/doc/" class="btn btn-secondary">Use the API</a>
+      <a href="/glossary" class="btn btn-secondary">Glossary</a>
+    </div>
+  </div>
+</section>
+
+<div class="page-container">
+<section class="metrics-section" id="group-metrics" role="region" aria-labelledby="group-metrics-title">
+  <h2 class="section-title" id="group-metrics-title">Group metrics</h2>
+  <div class="metrics-grid">
+      <div class="metric-card">
+  <div class="metric-label">Groups tracked</div>
+  <div class="metric-value">524</div>
+  
+</div>
+      <div class="metric-card">
+  <div class="metric-label">Relays online</div>
+  <div class="metric-value">250</div>
+  <div class="metric-sublabel">of 2403 total</div>
+</div>
+      <div class="metric-card">
+  <div class="metric-label">DLS</div>
+  <div class="metric-value">688</div>
+  
+</div>
+      <div class="metric-card">
+  <div class="metric-label">FS</div>
+  <div class="metric-value">1394</div>
+  
+</div>
+      <div class="metric-card">
+  <div class="metric-label">Chats</div>
+  <div class="metric-value">298</div>
+  
+</div>
+      <div class="metric-card">
+  <div class="metric-label">Admin/Affiliates</div>
+  <div class="metric-value">39</div>
+  
+</div>
+  </div>
+</section>
+
+<section class="metrics-section" id="post-metrics" role="region" aria-labelledby="post-metrics-title">
+  <h2 class="section-title" id="post-metrics-title">Post metrics</h2>
+  <div class="metrics-grid">
+      <div class="metric-card">
+  <div class="metric-label">Posts (24h)</div>
+  <div class="metric-value">13</div>
+  
+</div>
+      <div class="metric-card">
+  <div class="metric-label">Posts (this month)</div>
+  <div class="metric-value">1004</div>
+  <div class="metric-sublabel">December</div>
+</div>
+      <div class="metric-card">
+  <div class="metric-label">Posts (90 days)</div>
+  <div class="metric-value">2758</div>
+  
+</div>
+      <div class="metric-card">
+  <div class="metric-label">Posts (this year)</div>
+  <div class="metric-value">8832</div>
+  <div class="metric-sublabel">2025</div>
+</div>
+      <div class="metric-card">
+  <div class="metric-label">Total posts</div>
+  <div class="metric-value">27243</div>
+  
+</div>
+  </div>
+</section>
+
+<section class="metrics-section" id="post-metrics" role="region" aria-labelledby="post-metrics-title">
+  <h2 class="section-title" id="post-metrics-title">Other metrics</h2>
+  <div class="metrics-grid">
+      <div class="metric-card">
+  <div class="metric-label">Markets</div>
+  <div class="metric-value">138</div>
+  
+</div>
+      <div class="metric-card">
+  <div class="metric-label">Markets relays online</div>
+  <div class="metric-value">111</div>
+  <div class="metric-sublabel">of 232 total</div>
+</div>
+  </div>
+</section>
+
+<section class="metrics-section" id="post-metrics" role="region" aria-labelledby="post-metrics-title">
+  <div class="metrics-grid">
+      <div class="metric-card">
+  <div class="metric-label">Parsers</div>
+  <div class="metric-value">219</div>
+  
+</div>
+  </div>
+</section>
+</div>
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div>
+      Follow us on 
+      <a href="https://social.circl.lu/@Ransomlook" target="_blank">Mastodon</a> &amp; 
+      <a href="https://bsky.app/profile/ransomlook.bsky.social" target="_blank">BlueSky</a>
+      – Contact us on
+      <a href="https://www.linkedin.com/company/ransomlook/" target="_blank">LinkedIn</a>
+      – Contribute on 
+      <a href="https://github.com/RansomLook/RansomLook" target="_blank">GitHub</a>
+    </div>
+    <div>
+      RansomLook © 2022-2025
+    </div>
+  </div>
+</footer>
+
+<!-- Overlay / Modal de recherche -->
+<div id="searchModal" class="rl-modal" role="dialog" aria-modal="true" aria-labelledby="searchLabel" hidden>
+  <div class="rl-modal__backdrop" data-close></div>
+  <div class="rl-modal__panel" role="document">
+    <button class="rl-modal__close" aria-label="Close" data-close>&times;</button>
+    <h2 id="searchLabel" class="rl-modal__title">Search</h2>
+    <form action="/search" method="post" class="rl-search-form">
+      <input type="text" name="search" placeholder="type to search" aria-label="Search text" class="rl-search-input" autofocus>
+      <button type="submit" class="btn">Search</button>
+    </form>
+  </div>
+</div>
+
+<style>
+.visually-hidden{position:absolute!important;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);border:0}
+.rl-modal[hidden]{display:none}
+.rl-modal{position:fixed; inset:0; z-index:1400; display:grid; place-items:center;}
+.rl-modal__backdrop{position:absolute; inset:0; background:rgba(0,0,0,.55); backdrop-filter:saturate(120%) blur(2px);}
+.rl-modal__panel{position:relative; width:min(600px,92vw); background:var(--card); border:1px solid var(--border); border-radius:16px; padding:20px; box-shadow:0 18px 50px rgba(0,0,0,.45); animation:rl-pop .16s ease-out;}
+@keyframes rl-pop{from{transform:scale(.98);opacity:0}to{transform:scale(1);opacity:1}}
+.rl-modal__title{margin:0 0 12px; font-size:18px; font-weight:700; color:var(--text);}
+.rl-modal__close{position:absolute; top:10px; right:10px; background:transparent; border:1px solid var(--border); color:var(--text); width:34px; height:34px; border-radius:10px; cursor:pointer;}
+.rl-modal__close:hover{background:#182232}
+.icon-btn{display:inline-flex; align-items:center; justify-content:center; width:36px; height:36px; border-radius:10px; background:#1a2537; border:1px solid var(--border); color:var(--text); cursor:pointer;}
+.icon-btn:hover{background:#22324c}
+.header-search{margin-left:8px}
+.rl-search-form{display:flex; gap:10px; align-items:center; margin-top:6px;}
+.rl-search-input{flex:1; background:#101827; color:var(--text); border:1px solid var(--border); border-radius:12px; padding:12px 14px; font-size:16px; line-height:1.2;}
+.rl-search-input::placeholder{color:var(--muted)}
+@media (max-width:480px){.rl-search-form{flex-direction:column; align-items:stretch}.rl-modal__close{top:8px; right:8px}}
+
+/* --- Navbar 'More' dropdown --- */
+/* Ensure 'More' shows as active without staying open */
+.nav-links .more summary.active { background:#1a2537; border-color:var(--border); }
+
+.nav-links .more details{position:relative}
+.nav-links .more summary{list-style:none; cursor:pointer; padding:8px 12px; border-radius:10px; border:1px solid var(--border); background:#151e2d}
+.nav-links .more summary::-webkit-details-marker{display:none}
+.nav-links .more[open] summary{background:#1a2537}
+.nav-links .more .more-menu{position:absolute; top:calc(100% + 8px); left:0; min-width:220px; background:var(--card); border:1px solid var(--border); border-radius:12px; padding:6px; box-shadow:0 12px 40px rgba(0,0,0,.35); z-index:1200}
+.nav-links .more .more-menu li{margin:0}
+.nav-links .more .more-menu a{display:block; padding:8px 10px; border-radius:8px}
+.nav-links .more .more-menu a:hover{background:#22324c}
+@media (max-width: 880px){
+  .nav-links{gap:8px}
+}
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const openBtns  = document.querySelectorAll(".search-open");
+  const modal     = document.getElementById("searchModal");
+  const closers   = modal ? modal.querySelectorAll("[data-close]") : [];
+  const input     = modal ? modal.querySelector(".rl-search-input") : null;
+
+  function openModal(){
+    if(!modal) return;
+    modal.hidden = false;
+    document.body.style.overflow = "hidden";
+    openBtns.forEach(b => b.setAttribute("aria-expanded", "true"));
+    setTimeout(()=> input && input.focus(), 0);
+  }
+  function closeModal(){
+    if(!modal) return;
+    modal.hidden = true;
+    document.body.style.overflow = "";
+    openBtns.forEach(b => b.setAttribute("aria-expanded", "false"));
+  }
+
+  openBtns.forEach(b => b.addEventListener("click", openModal));
+  closers.forEach(el => el.addEventListener("click", closeModal));
+  modal?.addEventListener("keydown", (e)=>{ if(e.key === "Escape") closeModal(); });
+  modal?.addEventListener("click", (e)=>{ if(e.target.classList.contains("rl-modal__backdrop")) closeModal(); });
+  document.addEventListener("keydown", (e)=>{
+    const isMac = navigator.platform.toUpperCase().includes("MAC");
+    if((isMac && e.metaKey && e.key.toLowerCase()==="k") || (!isMac && e.ctrlKey && e.key.toLowerCase()==="k")){
+      e.preventDefault();
+      if(modal?.hidden) openModal(); else closeModal();
+    }
+  });
+});
+</script>
+
+</body>
+</html>

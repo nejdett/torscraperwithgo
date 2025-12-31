@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project 404 - Forum</title>
+    <meta name="description" content="Project 404 Forum - Share, discuss, and explore communities without tracking or ads.">
+    <meta http-equiv="onion-location" content="http://4o4o4hn4hsujpnbsso7tqigujuokafxys62thulbk2k3mf46vq22qfqd.onion/forum">
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'JetBrains Mono', 'Consolas', 'Monaco', 'Courier New', monospace;
+    background: linear-gradient(135deg, #0d1117 0%, #161b22 100%);
+    color: #c9d1d9;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+}
+
+.forum-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: rgba(13, 17, 23, 0.95);
+    color: #58a6ff;
+    font-family: inherit;
+    min-height: 100vh;
+    padding: 20px;
+    backdrop-filter: blur(10px);
+    border-left: 1px solid rgba(88, 166, 255, 0.2);
+    border-right: 1px solid rgba(88, 166, 255, 0.2);
+}
+
+/* Header and Navigation */
+.forum-header {
+    background: linear-gradient(135deg, #161b22 0%, #21262d 100%);
+    border: 2px solid rgba(88, 166, 255, 0.4);
+    border-radius: 8px;
+    padding: 8px;
+    margin-bottom: 10px;
+    box-shadow: 0 8px 32px rgba(88, 166, 255, 0.1);
+}
+
+.forum-title {
+    color: #58a6ff;
+    font-size: 1.8em;
+    margin: 0 0 2px 0;
+    text-align: center;
+    text-shadow: 0 0 15px rgba(88, 166, 255, 0.5);
+    font-weight: bold;
+}
+
+.forum-subtitle {
+    color: #7d8590;
+    text-align: center;
+    margin-bottom: 8px;
+    font-size: 0.9em;
+}
+
+.forum-nav {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.forum-nav a {
+    color: #58a6ff;
+    text-decoration: none;
+    padding: 4px 8px;
+    border: 2px solid rgba(88, 166, 255, 0.4);
+    background: rgba(13, 17, 23, 0.8);
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    font-size: 0.9em;
+    position: relative;
+    overflow: hidden;
+}
+
+.forum-nav a::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(88, 166, 255, 0.15), transparent);
+    transition: left 0.5s;
+}
+
+.forum-nav a:hover::before {
+    left: 100%;
+}
+
+.forum-nav a:hover, .forum-nav a.active {
+    background: rgba(88, 166, 255, 0.1);
+    border-color: #58a6ff;
+    box-shadow: 0 0 20px rgba(88, 166, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+.forum-nav a.active {
+    background: rgba(88, 166, 255, 0.2);
+    box-shadow: 0 0 30px rgba(88, 166, 255, 0.4);
+}
+
+/* Notification Badge */
+.notification-badge {
+    background: #ff4444 !important;
+    color: white !important;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 0.8em;
+    margin-left: 5px;
+    display: inline-block;
+    min-width: 18px;
+    text-align: center;
+    font-weight: bold;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+/* Breadcrumb Navigation */
+.breadcrumb {
+    background: rgba(22, 27, 34, 0.8);
+    border: 1px solid rgba(88, 166, 255, 0.2);
+    border-radius: 6px;
+    padding: 4px 8px;
+    margin-bottom: 8px;
+    font-size: 0.8em;
+}
+
+.breadcrumb a {
+    color: #58a6ff;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.breadcrumb a:hover {
+    color: #79c0ff;
+    text-shadow: 0 0 8px rgba(88, 166, 255, 0.5);
+}
+
+.breadcrumb span {
+    color: #7d8590;
+    margin: 0 8px;
+}
+
+/* Sections */
+.section {
+    background: linear-gradient(135deg, #161b22 0%, #21262d 100%);
+    border: 2px solid rgba(88, 166, 255, 0.3);
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 10px;
+    box-shadow: 0 8px 32px rgba(88, 166, 255, 0.08);
+    position: relative;
+    overflow: hidden;
+}
+
+.section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #58a6ff, #79c0ff, #58a6ff);
+    opacity: 0.8;
+}
+
+.section h3 {
+    color: #58a6ff;
+    font-size: 1.3em;
+    text-shadow: 0 0 15px rgba(88, 166, 255, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.section h4 {
+    color: #79c0ff;
+    margin: 8px 0 4px 0;
+    font-size: 1.1em;
+}
+
+/* Cards */
+.community-card, .post-card, .reply-card {
+    background: linear-gradient(135deg, #0d1117 0%, #161b22 100%);
+    border: 1px solid rgba(88, 166, 255, 0.2);
+    border-radius: 8px;
+    padding: 8px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Clickable card wrapper */
+a.card-link {
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+}
+
+a.card-link .community-card,
+a.card-link .post-card {
+    cursor: pointer;
+}
+
+.community-card::before, .post-card::before, .reply-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(180deg, #58a6ff, #79c0ff);
+    opacity: 0.7;
+}
+
+.community-card:hover, .post-card:hover, .reply-card:hover {
+    border-color: rgba(88, 166, 255, 0.5);
+    box-shadow: 0 8px 32px rgba(88, 166, 255, 0.15);
+    transform: translateY(-3px);
+    background: linear-gradient(135deg, #161b22 0%, #21262d 100%);
+}
+
+.community-card:hover::before, .post-card:hover::before, .reply-card:hover::before {
+    opacity: 1;
+    width: 6px;
+}
+
+.card-content {
+    flex: 1;
+    text-align: left;
+}
+
+.card-title {
+    color: #58a6ff;
+    font-size: 1.1em;
+    margin-bottom: 4px;
+    font-weight: 600;
+}
+
+.card-title a {
+    color: inherit;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+.card-title a:hover {
+    text-shadow: 0 0 12px rgba(88, 166, 255, 0.6);
+    color: #79c0ff;
+}
+
+.card-description {
+    color: #c9d1d9;
+    margin-bottom: 4px;
+    line-height: 1.4;
+    font-size: 0.9em;
+    text-align: left;
+}
+
+.meta {
+    color: #7d8590;
+    font-size: 0.8em;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.meta-icon {
+    width: 16px;
+    height: 16px;
+    opacity: 0.7;
+}
+
+/* Vote Buttons */
+.vote-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    min-width: 40px;
+    background: rgba(13, 17, 23, 0.6);
+    border-radius: 6px;
+    padding: 4px;
+    border: 1px solid rgba(88, 166, 255, 0.1);
+}
+
+.vote-button {
+    background: rgba(88, 166, 255, 0.1);
+    border: 1px solid rgba(88, 166, 255, 0.3);
+    color: #58a6ff;
+    padding: 2px 4px;
+    cursor: pointer;
+    font-family: inherit;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    font-size: 1em;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.vote-button:hover {
+    background: rgba(88, 166, 255, 0.2);
+    border-color: #58a6ff;
+    box-shadow: 0 0 15px rgba(88, 166, 255, 0.3);
+    transform: scale(1.1);
+}
+
+.vote-score {
+    color: #58a6ff;
+    font-weight: bold;
+    font-size: 0.85em;
+    text-shadow: 0 0 8px rgba(88, 166, 255, 0.5);
+}
+
+/* Notification Styles */
+.notification-item {
+    border: 1px solid rgba(88, 166, 255, 0.3);
+    border-radius: 6px;
+    padding: 8px;
+    margin-bottom: 8px;
+    background: rgba(13, 17, 23, 0.8);
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.notification-item:hover {
+    border-color: rgba(88, 166, 255, 0.5);
+    box-shadow: 0 4px 16px rgba(88, 166, 255, 0.1);
+    transform: translateY(-2px);
+}
+
+.notification-item.unread {
+    border-left: 4px solid #58a6ff;
+    background: rgba(88, 166, 255, 0.05);
+}
+
+.notification-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 4px;
+}
+
+.notification-icon {
+    font-size: 1.2em;
+    margin-right: 8px;
+}
+
+.notification-title {
+    color: #58a6ff;
+    font-weight: bold;
+    flex: 1;
+}
+
+.notification-badge-new {
+    background: #58a6ff;
+    color: #0d1117;
+    border-radius: 3px;
+    padding: 2px 6px;
+    font-size: 0.7em;
+    margin-left: 8px;
+    font-weight: bold;
+}
+
+.notification-message {
+    color: #c9d1d9;
+    margin: 4px 0;
+    line-height: 1.4;
+}
+
+.notification-meta {
+    font-size: 0.9em;
+    color: #7d8590;
+    margin-top: 4px;
+}
+
+.notification-actions {
+    margin-top: 4px;
+    display: flex;
+    gap: 6px;
+}
+
+/* Buttons */
+.button {
+    background: linear-gradient(135deg, #21262d 0%, #30363d 100%);
+    border: 2px solid rgba(88, 166, 255, 0.4);
+    color: #58a6ff;
+    padding: 4px 8px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin: 1px;
+    cursor: pointer;
+    font-family: inherit;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    font-size: 0.9em;
+    position: relative;
+    overflow: hidden;
+}
+
+.button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(88, 166, 255, 0.15), transparent);
+    transition: left 0.5s;
+}
+
+.button:hover::before {
+    left: 100%;
+}
+
+.button:hover {
+    background: rgba(88, 166, 255, 0.1);
+    border-color: #58a6ff;
+    box-shadow: 0 0 20px rgba(88, 166, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+.button.danger {
+    border-color: rgba(248, 81, 73, 0.4);
+    color: #f85149;
+}
+
+.button.danger:hover {
+    background: rgba(248, 81, 73, 0.1);
+    border-color: #f85149;
+    box-shadow: 0 0 20px rgba(248, 81, 73, 0.3);
+}
+
+.button.primary {
+    background: linear-gradient(135deg, #238636 0%, #2ea043 100%);
+    color: #ffffff;
+    border-color: #238636;
+}
+
+.button.primary:hover {
+    background: linear-gradient(135deg, #2ea043 0%, #238636 100%);
+    box-shadow: 0 0 25px rgba(46, 160, 67, 0.4);
+}
+
+/* Forms */
+.form-group {
+    margin-bottom: 8px;
+}
+
+.form-group label {
+    display: block;
+    color: #58a6ff;
+    margin-bottom: 2px;
+    font-weight: 500;
+    font-size: 0.95em;
+}
+
+.form-group input, .form-group textarea, .form-group select {
+    width: 100%;
+    background: rgba(13, 17, 23, 0.8);
+    border: 2px solid rgba(88, 166, 255, 0.2);
+    color: #c9d1d9;
+    padding: 6px;
+    font-family: inherit;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    font-size: 0.9em;
+}
+
+.form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+    outline: none;
+    border-color: #58a6ff;
+    box-shadow: 0 0 15px rgba(88, 166, 255, 0.3);
+    background: rgba(13, 17, 23, 0.95);
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+/* Admin Sections */
+.admin-section {
+    border-color: rgba(248, 81, 73, 0.4);
+}
+
+.admin-section::before {
+    background: linear-gradient(90deg, #f85149, #ff6b6b, #f85149);
+}
+
+.admin-section h3 {
+    color: #f85149;
+    border-color: rgba(248, 81, 73, 0.3);
+    text-shadow: 0 0 15px rgba(248, 81, 73, 0.3);
+}
+
+/* Stats and Info Boxes */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.stat-box {
+    background: rgba(88, 166, 255, 0.05);
+    border: 1px solid rgba(88, 166, 255, 0.2);
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.stat-box:hover {
+    background: rgba(88, 166, 255, 0.08);
+    border-color: rgba(88, 166, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+.stat-number {
+    font-size: 1.8em;
+    color: #58a6ff;
+    font-weight: bold;
+    display: block;
+    text-shadow: 0 0 10px rgba(88, 166, 255, 0.3);
+}
+
+.stat-label {
+    color: #7d8590;
+    font-size: 0.85em;
+    margin-top: 6px;
+}
+
+/* Sorting Controls */
+.sort-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 10px 0 8px 0;
+    padding: 6px 8px;
+    background: linear-gradient(135deg, rgba(88, 166, 255, 0.05) 0%, rgba(88, 166, 255, 0.02) 100%);
+    border: 1px solid rgba(88, 166, 255, 0.2);
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(88, 166, 255, 0.05);
+}
+
+.sort-controls h4 {
+    margin: 0;
+    color: #79c0ff;
+    font-size: 1.1em;
+    text-shadow: 0 0 10px rgba(121, 192, 255, 0.3);
+}
+
+.sort-buttons {
+    display: flex;
+    gap: 3px;
+    align-items: center;
+}
+
+.sort-label {
+    color: #7d8590;
+    font-size: 0.9em;
+    margin-right: 4px;
+    font-weight: 500;
+}
+
+.sort-button {
+    background: linear-gradient(135deg, #161b22 0%, #21262d 100%);
+    border: 1px solid rgba(88, 166, 255, 0.3);
+    color: #7d8590;
+    padding: 3px 6px;
+    text-decoration: none;
+    font-size: 0.8em;
+    border-radius: 5px;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    position: relative;
+    overflow: hidden;
+}
+
+.sort-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(88, 166, 255, 0.1), transparent);
+    transition: left 0.3s;
+}
+
+.sort-button:hover::before {
+    left: 100%;
+}
+
+.sort-button:hover {
+    border-color: rgba(88, 166, 255, 0.5);
+    color: #58a6ff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(88, 166, 255, 0.15);
+}
+
+.sort-button.active {
+    background: linear-gradient(135deg, #58a6ff 0%, #79c0ff 100%);
+    border-color: #58a6ff;
+    color: #0d1117;
+    font-weight: 600;
+    box-shadow: 0 0 15px rgba(88, 166, 255, 0.4);
+}
+
+.sort-button.active:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 0 20px rgba(88, 166, 255, 0.5);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .forum-container {
+        padding: 10px;
+        border-left: none;
+        border-right: none;
+    }
+    
+    .forum-header {
+        padding: 12px;
+    }
+    
+    .forum-nav {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .community-card, .post-card, .reply-card {
+        flex-direction: column;
+        gap: 12px;
+        padding: 12px;
+    }
+    
+    .vote-buttons {
+        flex-direction: row;
+        width: 100%;
+        justify-content: center;
+        min-width: auto;
+    }
+    
+    .meta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    
+    .section {
+        padding: 15px;
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+}
+
+/* Loading Animation */
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+.loading {
+    animation: pulse 2s infinite;
+}
+
+/* Markdown Styling */
+.card-description h1 {
+    margin: 2px 0 1px 0;
+    line-height: 1.1;
+    color: #aaaaaa;
+    font-size: 1.4em;
+    border-bottom: 1px solid rgba(170, 170, 170, 0.4);
+    padding-bottom: 1px;
+}
+
+.card-description h2 {
+    margin: 1px 0 1px 0;
+    line-height: 1.1;
+    color: #aaaaaa;
+    font-size: 1.2em;
+}
+
+.card-description h3 {
+    margin: 1px 0 1px 0;
+    line-height: 1.1;
+    color: #aaaaaa;
+    font-size: 1.1em;
+}
+
+.card-description pre {
+    max-width: 100%;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    background: rgba(0, 0, 0, 0.8);
+    border: 1px solid rgba(88, 166, 255, 0.3);
+    border-radius: 3px;
+    padding: 2px;
+    margin: 1px 0;
+    line-height: 1.1;
+    color: #58a6ff;
+    font-size: 1em;
+}
+
+.card-description ul {
+    list-style: none;
+    padding-left: 8px;
+    margin: 1px 0;
+}
+
+.card-description li {
+    margin: 0;
+    line-height: 1.1;
+}
+
+.card-description blockquote {
+    margin: 1px 0 !important;
+    font-size: 0.9em;
+    border-left: 2px solid #58a6ff !important;
+    padding: 1px 4px !important;
+    background: rgba(88, 166, 255, 0.03) !important;
+    color: #ccc !important;
+    font-style: italic !important;
+    line-height: 1.1 !important;
+}
+
+.card-description hr {
+    border: none;
+    border-top: 1px solid rgba(88, 166, 255, 0.3);
+    margin: 2px 0;
+}
+
+.card-description code {
+    font-size: 1em;
+    background: rgba(13, 17, 23, 0.8);
+    padding: 2px 4px;
+    border-radius: 3px;
+    color: #58a6ff;
+}
+
+.card-description a:hover {
+    color: #79c0ff;
+    text-shadow: 0 0 8px rgba(88, 166, 255, 0.5);
+}
+
+/* Pagination Styles */
+.pagination {
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+    flex-wrap: wrap;
+}
+
+.pagination .button {
+    transition: all 0.3s ease;
+    border: 1px solid rgba(88, 166, 255, 0.3);
+    background: rgba(13, 17, 23, 0.8);
+}
+
+.pagination .button:hover {
+    background: rgba(88, 166, 255, 0.1);
+    border-color: rgba(88, 166, 255, 0.5);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(88, 166, 255, 0.2);
+}
+
+.pagination .button.primary {
+    background: rgba(88, 166, 255, 0.2);
+    border-color: rgba(88, 166, 255, 0.6);
+    font-weight: bold;
+}
+
+.pagination span {
+    color: #7d8590;
+    padding: 8px;
+    font-size: 0.9em;
+}
+
+@media (max-width: 768px) {
+    .pagination {
+        gap: 3px;
+    }
+    
+    .pagination .button {
+        padding: 6px 8px;
+        font-size: 0.8em;
+    }
+}
+</style>
+</head>
+<body>
+
+<div class="forum-container">
+    <div class="forum-header">
+        <h1 class="forum-title">404 FORUM NOT FOUND</h1>
+        <p class="forum-subtitle">Community Discussion Terminal</p>
+        <div class="forum-nav">
+            <a href="/forum?section=communities" class="active">
+                🏠 Communities
+            </a>
+                            <a href="/account" class="button primary" style="margin-left: 20px;">
+                    🔐 Login to Participate
+                </a>
+                        <a href="/" class="button primary" style="margin-left: 20px;">
+                🏠 GET ME OUT OF HERE
+            </a>
+        </div>
+    </div>
+
+
+
+
+
+        <div class="stats-grid">
+            <div class="stat-box">
+                <span class="stat-number">5</span>
+                <div class="stat-label">Active Communities</div>
+            </div>
+            <div class="stat-box">
+                <span class="stat-number">25</span>
+                <div class="stat-label">Total Posts</div>
+            </div>
+            <div class="stat-box">
+                <span class="stat-number">Online</span>
+                <div class="stat-label">Forum Status</div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>🌐 Active Communities</h3>
+                                                <a href="/forum?section=community&slug=general" style="text-decoration: none; color: inherit;">
+                        <div class="community-card">
+                            <div class="card-content">
+                                <h4 class="card-title">
+                                    General Discussion                                </h4>
+                                <p class="card-description">General hacking and security discussion</p>
+                                <div class="meta">
+                                    <div class="meta-item">
+                                        <span>📄</span>
+                                        <span>10 posts</span>
+                                    </div>
+                                    <div class="meta-item">
+                                        <span>🕒</span>
+                                        <span>Active</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-actions" style="display: flex; align-items: center;">
+                                <div class="button primary" style="pointer-events: none;">
+                                    Enter Community →
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                                    <a href="/forum?section=community&slug=news" style="text-decoration: none; color: inherit;">
+                        <div class="community-card">
+                            <div class="card-content">
+                                <h4 class="card-title">
+                                    News &amp; Updates                                </h4>
+                                <p class="card-description">Latest security news and updates</p>
+                                <div class="meta">
+                                    <div class="meta-item">
+                                        <span>📄</span>
+                                        <span>3 posts</span>
+                                    </div>
+                                    <div class="meta-item">
+                                        <span>🕒</span>
+                                        <span>Active</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-actions" style="display: flex; align-items: center;">
+                                <div class="button primary" style="pointer-events: none;">
+                                    Enter Community →
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                                    <a href="/forum?section=community&slug=offtopic" style="text-decoration: none; color: inherit;">
+                        <div class="community-card">
+                            <div class="card-content">
+                                <h4 class="card-title">
+                                    Off Topic                                </h4>
+                                <p class="card-description">Non-security related discussions</p>
+                                <div class="meta">
+                                    <div class="meta-item">
+                                        <span>📄</span>
+                                        <span>2 posts</span>
+                                    </div>
+                                    <div class="meta-item">
+                                        <span>🕒</span>
+                                        <span>Active</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-actions" style="display: flex; align-items: center;">
+                                <div class="button primary" style="pointer-events: none;">
+                                    Enter Community →
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                                    <a href="/forum?section=community&slug=tools" style="text-decoration: none; color: inherit;">
+                        <div class="community-card">
+                            <div class="card-content">
+                                <h4 class="card-title">
+                                    Tools &amp; Resources                                </h4>
+                                <p class="card-description">Share and discuss hacking tools and resources</p>
+                                <div class="meta">
+                                    <div class="meta-item">
+                                        <span>📄</span>
+                                        <span>4 posts</span>
+                                    </div>
+                                    <div class="meta-item">
+                                        <span>🕒</span>
+                                        <span>Active</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-actions" style="display: flex; align-items: center;">
+                                <div class="button primary" style="pointer-events: none;">
+                                    Enter Community →
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                                    <a href="/forum?section=community&slug=tutorials" style="text-decoration: none; color: inherit;">
+                        <div class="community-card">
+                            <div class="card-content">
+                                <h4 class="card-title">
+                                    Tutorials                                </h4>
+                                <p class="card-description">Educational content and how-to guides</p>
+                                <div class="meta">
+                                    <div class="meta-item">
+                                        <span>📄</span>
+                                        <span>6 posts</span>
+                                    </div>
+                                    <div class="meta-item">
+                                        <span>🕒</span>
+                                        <span>Active</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-actions" style="display: flex; align-items: center;">
+                                <div class="button primary" style="pointer-events: none;">
+                                    Enter Community →
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                                    </div></div>
+
+</body>
+
+</html>
